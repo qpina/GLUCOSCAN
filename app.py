@@ -108,7 +108,7 @@ if st.button("Procesar imagen") and imagen:
         from PIL import Image
         st.write("### 📸 Imagen procesada con detecciones:")
         imagen_resultado = Image.open("imagen_procesada.jpg")
-        st.image(imagen_resultado, caption="Alimentos y dado detectados", use_column_width=True)
+        st.image(imagen_resultado, caption="Alimentos y dado detectados", use_container_width=True)
         
         with open("imagen_procesada.jpg", "rb") as file:
             st.download_button(
