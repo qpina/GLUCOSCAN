@@ -20,7 +20,7 @@ with col2:
 # -------- FUNCIÓN PRINCIPAL --------
 def procesar_imagen(imagen_path, ratio_usuario=10):
     from ultralytics import YOLO
-    model = YOLO("C:/Users/quiqu/OneDrive/Escritorio/UNIVERSIDAD/1º MIO/INGENIA MEDTECH/best.pt")  # CAMBIA esto a la ruta real en tu PC
+    model = YOLO("best.pt")  # CAMBIA esto a la ruta real en tu PC
 
     results = model.predict(source=imagen_path, conf=0.4)
 
