@@ -128,3 +128,25 @@ if st.button("Procesar imagen") and imagen:
         raise
 
 
+st.subheader("📊 Resultados del análisis:")
+
+col1, col2, col3 = st.columns(3)
+
+for idx, (fruta, info) in enumerate(resultados.items()):
+    volumen = info["volumen_cm3"]
+    masa = info["masa_g"]
+    hc = info["hc_g"]
+    raciones = info["raciones"]
+
+    with [col1, col2, col3][idx % 3]:
+        st.metric(
+            label=f"🍎 {fruta}",
+            value=f"{raciones:.2f} u insulina",
+            delta=f"{hc:.1f} g HC / {masa:.1f} g peso",
+            help=f"Volumen estimado: {volumen:.1f} cm³"
+        )
+
+st.divider()
+
+# Resultado final de ración total
+st.success(f"🔵 Ración total recomendada: **{sum(info['raciones'] for info in resultados.values()):.2f} unidades de insulina**")
