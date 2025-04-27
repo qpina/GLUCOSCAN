@@ -19,6 +19,34 @@ with col2:
     st.caption("Contador inteligente de hidratos de carbono a partir de imágenes 🍏🤖")
 
 
+# ---- Crear pestañas principales ----
+tab1, tab2 = st.tabs(["📸 Contador", "🎓 Sobre Nosotros"])
+
+# ---- Pestaña de Contador ----
+with tab1:
+    st.header("Calcula las raciones de insulina subiendo una imagen 📷")
+    
+    # Aquí va TODO lo que ya tienes: subida imagen, ratio, procesar, resultados, etc.
+    uploaded_file = st.file_uploader(...)
+    # resto de tu app...
+
+# ---- Pestaña de Sobre Nosotros ----
+with tab2:
+    st.header("Sobre el proyecto GlucoScan 🎓")
+    st.image("foto_grupo.jpg", width=400)  # Puedes subir una imagen bonita
+    st.markdown("""
+    **GlucoScan** es un proyecto desarrollado por estudiantes de la Universidad [Nombre de la Universidad].
+    
+    Nuestro objetivo es facilitar el conteo de hidratos de carbono a personas con diabetes mediante tecnología de visión artificial.
+    
+    - 👩‍🎓 Estudiantes: [Tu nombre], [Nombre 2], [Nombre 3]...
+    - 📍 Universidad: [Nombre Universidad]
+    - 📅 Año: 2024
+    
+    ¡Esperamos que nuestra app te ayude en tu día a día! 🚀
+    """)
+
+
 # -------- FUNCIÓN PRINCIPAL --------
 def procesar_imagen(imagen_path, ratio_usuario=10):
     from ultralytics import YOLO
