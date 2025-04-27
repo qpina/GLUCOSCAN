@@ -160,7 +160,7 @@ with tab2:
 
         Nuestro objetivo es facilitar el conteo de hidratos de carbono a personas con diabetes mediante visión artificial.
 
-        - 👩‍🎓 Estudiantes: Quique, María, Juan, Ana
+        - 👩‍🎓 Estudiantes: Aitana, Blanca, Juan, Jon, María, Marina, Quique y Sofía
         - 📍 Universidad: UPM
         - 📅 Año: 2024-2025
 
