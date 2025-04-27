@@ -10,7 +10,7 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 page_bg_color = '''
 <style>
 [data-testid="stAppViewContainer"] {
-background-color: #f5f5f5;
+background-color: #e6f7ff;
 }
 </style>
 '''
