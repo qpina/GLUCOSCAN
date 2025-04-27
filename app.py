@@ -46,6 +46,9 @@ def procesar_imagen(imagen_path, ratio_usuario=10):
                 a = np.sqrt(area_cm2 / np.pi)
                 b = c = a * 0.6
                 volumen = (4/3) * np.pi * a * b * c
+            elif label == "Pera":
+                a = np.sqrt(area_cm2 / np.pi)
+                b = c = a * 0.5  # Más estrecho que Kiwi/Mango
             elif label == "Banana":
                 volumen = area_cm2 * 2
             elif label == "Strawberry":
