@@ -31,7 +31,7 @@ def procesar_imagen(imagen_path, ratio_usuario=10):
     dice_index = [i for i, cls in enumerate(classes) if names[cls] == "Dice"][0]
     dice_mask = masks[dice_index]
     dice_area_px = dice_mask.sum()
-    cm2_per_pixel = (1.4**2) / dice_area_px
+    cm2_per_pixel = (1.6**2) / dice_area_px
 
     volumenes = {}
     for i, cls in enumerate(classes):
