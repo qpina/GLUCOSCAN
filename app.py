@@ -96,7 +96,7 @@ def procesar_imagen(imagen_path, ratio_usuario=10):
 # -------------------------
 # Pestañas principales
 # -------------------------
-tab1, tab2 = st.tabs(["📸 Contador", "🎓 Sobre Nosotros"])
+tab1, tab2 = st.tabs(["📸 Contador", "Sobre Nosotros"])
 
 # -------------------------
 # Tab 1: Contador
@@ -149,20 +149,20 @@ with tab1:
 # Tab 2: Sobre Nosotros
 # -------------------------
 with tab2:
-    st.header("🎓 Sobre el proyecto GlucoScan")
+    st.header("Sobre el proyecto")
     col1, col2 = st.columns(2)
 
     with col1:
         st.image("foto_grupo.jpg", width=400)  # Subir una imagen de tu grupo
     with col2:
         st.markdown("""
-        **GlucoScan** es un proyecto desarrollado por estudiantes de la Universidad [Nombre Universidad].
+        **GlucoScan** es un proyecto desarrollado por estudiantes de la Universidad Politécnica de Madrid.
 
         Nuestro objetivo es facilitar el conteo de hidratos de carbono a personas con diabetes mediante visión artificial.
 
         - 👩‍🎓 Estudiantes: Quique, María, Juan, Ana
-        - 📍 Universidad: [Nombre Universidad]
-        - 📅 Año: 2024
+        - 📍 Universidad: UPM
+        - 📅 Año: 2024-2025
 
         Gracias por confiar en nuestra app. ¡Seguiremos mejorándola cada día! 🚀
         """)
