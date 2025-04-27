@@ -6,18 +6,16 @@ df = df.dropna(how='all').set_index("Alimento")
 import os
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
-# ---- Fondo personalizado ----
-page_bg_img = '''
+# ---- Fondo de color sólido ----
+page_bg_color = '''
 <style>
 [data-testid="stAppViewContainer"] {
-background-image: url("https://images.unsplash.com/photo-1506784983877-45594efa4cbe");
-background-size: cover;
-background-position: center;
-background-attachment: fixed;
+background-color: #f5f5f5;
 }
 </style>
 '''
-st.markdown(page_bg_img, unsafe_allow_html=True)
+st.markdown(page_bg_color, unsafe_allow_html=True)
+
 
 from PIL import Image
 
