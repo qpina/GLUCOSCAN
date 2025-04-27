@@ -1,130 +1,123 @@
 import streamlit as st
-import numpy as np
-import pandas as pd
-df = pd.read_csv("BaseDeDatos.csv")
-df = df.dropna(how='all').set_index("Alimento")
+from PIL import Image
 import os
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
+from ultralytics import YOLO
+import pandas as pd
+import numpy as np
 
-from PIL import Image
+# -------------------------
+# Configuración de la página
+# -------------------------
+st.set_page_config(page_title="GlucoScan", page_icon="🍏", layout="wide")
 
-# Logo + título
-col1, col2 = st.columns([1, 5])
-with col1:
-    st.image("LOGOBUENO.png")  # Ajusta tamaño según el logo
-with col2:
-    st.markdown("# **GLUCOSCAN**")
-    st.caption("Contador inteligente de hidratos de carbono a partir de imágenes 🍏🤖")
+# -------------------------
+# Cargar modelo y base de datos
+# -------------------------
+@st.cache_resource
+def cargar_modelo():
+    model = YOLO("best.pt")
+    return model
 
+@st.cache_data
+def cargar_base_datos():
+    df = pd.read_csv("BaseDeDatos.csv")
+    df = df.dropna(how='all')
+    df.columns = df.columns.str.strip()  # Quitar espacios
+    return df
 
+modelo = cargar_modelo()
+base_datos = cargar_base_datos()
 
-# -------- FUNCIÓN PRINCIPAL --------
-def procesar_imagen(imagen_path, ratio_usuario=10):
-    from ultralytics import YOLO
-    model = YOLO("best.pt")  # CAMBIA esto a la ruta real en tu PC
+# -------------------------
+# Tabs principales
+# -------------------------
+tab1, tab2 = st.tabs(["📸 Contador", "🎓 Sobre Nosotros"])
 
-    results = model.predict(source=imagen_path, conf=0.4)
+# -------------------------
+# Tab 1: Contador
+# -------------------------
+with tab1:
+    st.header("Calcula las raciones de insulina subiendo una imagen 📷")
 
-    masks = results[0].masks.data.cpu().numpy()
-    classes = results[0].boxes.cls.cpu().numpy().astype(int)
-    names = results[0].names
+    uploaded_file = st.file_uploader("📤 Sube una imagen con un dado visible:", type=["jpg", "jpeg", "png"])
 
-    dice_index = [i for i, cls in enumerate(classes) if names[cls] == "Dice"][0]
-    dice_mask = masks[dice_index]
-    dice_area_px = dice_mask.sum()
-    cm2_per_pixel = (1.6**2) / dice_area_px
+    st.divider()
 
-    volumenes = {}
-    for i, cls in enumerate(classes):
-        label = names[cls]
-        if label != "Dice":
-            area_cm2 = masks[i].sum() * cm2_per_pixel
+    ratio = st.number_input("💉 Ratio de insulina (g HC / unidad)", min_value=1.0, max_value=30.0, step=0.5, value=10.0)
 
-            if label in ["Apple", "Orange", "Cherry", "Grapes"]:
-                r = np.sqrt(area_cm2 / np.pi)
-                volumen = (4/3) * np.pi * r**3
-            elif label in ["Kiwi", "Mango"]:
-                a = np.sqrt(area_cm2 / np.pi)
-                b = c = a * 0.6
-                volumen = (4/3) * np.pi * a * b * c
-            elif label == "Pera":
-                a = np.sqrt(area_cm2 / np.pi)
-                b = c = a * 0.5  # Más estrecho que Kiwi/Mango
-            elif label == "Banana":
-                volumen = area_cm2 * 2
-            elif label == "Strawberry":
-                volumen = (1/3) * area_cm2 * 2
-            else:
-                volumen = None
+    st.divider()
 
-            if volumen is not None:
-                volumenes[label] = volumen
+    procesar = st.button("🔎 Procesar imagen")
 
+    if uploaded_file is not None and procesar:
+        with st.spinner('🔄 Procesando imagen...'):
 
-    info = {}
-    for fruta, vol in volumenes.items():
-        if fruta in df.index:
-            densidad = float(str(df.loc[fruta]["Densidad (g/cm^3)"]).replace(",", "."))
-            hc_100g = float(str(df.loc[fruta]["HC por 100 g"]).replace(",", "."))
-            masa = densidad * vol
-            hc = masa * hc_100g / 100
-            raciones = hc / ratio_usuario
-            info[fruta] = {
-                "volumen": vol,
-                "masa": masa,
-                "hc": hc,
-                "raciones": raciones
-                
-            
-            }
-      
-    # Guardar imagen anotada con las detecciones
-    import cv2
-    annotated_image = results[0].plot()
-    cv2.imwrite("imagen_procesada.jpg", annotated_image) 
-        
-    return info
+            with open("imagen_temporal.jpg", "wb") as f:
+                f.write(uploaded_file.getbuffer())
 
+            try:
+                resultados = procesar_imagen("imagen_temporal.jpg", ratio_usuario=ratio)
 
+                st.success("✅ Imagen procesada correctamente")
+                st.divider()
 
-# -------- INTERFAZ STREAMLIT --------
-st.title("📷 Calcula las raciones de insulina subiendo una imagen")
+                st.subheader("📊 Resultados por alimento:")
+                col1, col2, col3 = st.columns(3)
 
-imagen = st.file_uploader("Sube una imagen con un dado visible", type=["jpg", "jpeg", "png"])
-ratio = st.number_input("Ratio de insulina (g HC / unidad)", value=10.0)
+                for idx, (fruta, datos) in enumerate(resultados.items()):
+                    with [col1, col2, col3][idx % 3]:
+                        st.metric(
+                            label=f"🍏 {fruta}",
+                            value=f"{datos['raciones']:.2f} u insulina",
+                            delta=f"{datos['hc']:.1f}g HC / {datos['masa']:.1f}g peso",
+                            help=f"Volumen: {datos['volumen']:.1f} cm³"
+                        )
 
-if st.button("Procesar imagen") and imagen:
-    with open("imagen_temporal.jpg", "wb") as f:
-        f.write(imagen.read())
+                st.divider()
 
-    try:
-        resultados = procesar_imagen("imagen_temporal.jpg", ratio_usuario=ratio)
+                total = sum([d["raciones"] for d in resultados.values()])
+                st.success(f"💉 Ración total recomendada: **{total:.2f} unidades de insulina**")
 
-        st.write("## Resultados por alimento:")
-        for fruta, datos in resultados.items():
-            st.write(f"**{fruta}**: volumen = {datos['volumen']:.2f} cm³, "
-                     f"masa = {datos['masa']:.2f} g, HC = {datos['hc']:.2f} g, "
-                     f"raciones = {datos['raciones']:.2f} u insulina")
+                st.divider()
 
-        total = sum([d["raciones"] for d in resultados.values()])
-        st.markdown(f"### 💉 Ración total recomendada: **{total:.2f} unidades de insulina**")
-        
-        from PIL import Image
-        st.write("### 📸 Imagen procesada con detecciones:")
-        imagen_resultado = Image.open("imagen_procesada.jpg")
-        st.image(imagen_resultado, caption="Alimentos y dado detectados", use_container_width=True)
-        
-        with open("imagen_procesada.jpg", "rb") as file:
-            st.download_button(
-                label="📥 Descargar imagen procesada",
-                data=file,
-                file_name="resultado.jpg",
-                mime="image/jpeg"
-            )
+                st.subheader("📸 Imagen procesada con detecciones:")
+                imagen_resultado = Image.open("imagen_procesada.jpg")
+                st.image(imagen_resultado, caption="Alimentos y dado detectados", use_container_width=True)
 
-    except Exception as e:
-        st.error(f"Ocurrió un error al procesar la imagen: {e}")
-        raise
+                with open("imagen_procesada.jpg", "rb") as file:
+                    st.download_button(
+                        label="📥 Descargar imagen procesada",
+                        data=file,
+                        file_name="resultado.jpg",
+                        mime="image/jpeg"
+                    )
 
+            except Exception as e:
+                st.error(f"❌ Error procesando la imagen: {e}")
+                raise
 
+# -------------------------
+# Tab 2: Sobre Nosotros
+# -------------------------
+with tab2:
+    st.header("Sobre el proyecto GlucoScan 🎓")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.image("foto_grupo.jpg", width=400)  # Asegúrate de subir esta imagen al repo
+
+    with col2:
+        st.markdown("""
+        **GlucoScan** es un proyecto desarrollado por estudiantes de la Universidad [Nombre Universidad].
+
+        Nuestro objetivo es facilitar el conteo de hidratos de carbono a personas con diabetes mediante visión artificial.
+
+        - 👩‍🎓 Estudiantes: Quique, María, Juan, Ana
+        - 📍 Universidad: [Nombre Universidad]
+        - 📅 Año: 2024
+
+        Gracias por confiar en nuestra app. ¡Seguiremos mejorándola cada día! 🚀
+        """)
