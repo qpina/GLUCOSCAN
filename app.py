@@ -9,7 +9,7 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 # -------------------------
 # Configuración de la página
 # -------------------------
-st.set_page_config(page_title="GlucoScan", page_icon="🍏", layout="wide")
+st.set_page_config(page_title="GlucoScan", layout="wide")
 
 # -------------------------
 # Cargar base de datos
@@ -96,7 +96,7 @@ def procesar_imagen(imagen_path, ratio_usuario=10):
 # -------------------------
 # Pestañas principales
 # -------------------------
-tab1, tab2 = st.tabs(["📸 Contador", "Sobre Nosotros"])
+tab1, tab2 = st.tabs(["📸 Contador", "👨🏽‍💻 Sobre Nosotros"])
 
 # -------------------------
 # Tab 1: Contador
