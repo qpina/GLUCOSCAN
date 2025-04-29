@@ -185,7 +185,7 @@ with tab2:
                 
     """)
 
-    st.image("foto_resultados.jpg", caption="Ejemplo de resultados", use_container_width=True)
+    st.image("foto_resultados.png", caption="Ejemplo de resultados", use_container_width=True)
 
     st.markdown("""
     🎯 ¡Así de fácil puedes controlar tu alimentación de forma automática!
