@@ -157,7 +157,7 @@ with tab2:
     col1, col2 = st.columns(2)
 
     with col1:
-        st.image("foto_grupo.jpg", use_column_width=True)  # Subir una imagen de tu grupo
+        st.image("foto_grupo.jpg", use_container_width=True)  # Subir una imagen de tu grupo
     with col2:
         st.markdown("""
         **GlucoScan** es una aplicación médica desarrollada por un grupo de alumnos de Máster de l universidad Politécnica de Madrid para la asignatura 
