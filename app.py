@@ -70,24 +70,25 @@ def procesar_imagen(imagen_path, ratio_usuario=10):
                 volumen = None
 
             if volumen is not None:
-                if label in volumenes:
-                    volumenes[label] += volumen
-                else:
-                    volumenes[label] = volumen
+                if label not in volumenes:
+                    volumenes[label] = []
+                volumenes[label].append(volumen)
 
     info = {}
-    for fruta, vol in volumenes.items():
-        if fruta in df.index:
-            densidad = float(str(df.loc[fruta]["Densidad (g/cm^3)"]).replace(",", "."))
-            hc_100g = float(str(df.loc[fruta]["HC por 100 g"]).replace(",", "."))
-            masa = densidad * vol
-            hc = masa * hc_100g / 100
-            raciones = hc / ratio_usuario
-            info[fruta] = {
-                "volumen": vol,
-                "masa": masa,
-                "hc": hc,
-                "raciones": raciones
+    for fruta, lista_vol in volumenes.items():
+        for i, vol in enumerate(lista_vol):
+            nombre = f"{fruta} {i+1}"  # Banana 1, Banana 2, etc.
+            if fruta in df.index:
+                densidad = float(str(df.loc[fruta]["Densidad (g/cm^3)"]).replace(",", "."))
+                hc_100g = float(str(df.loc[fruta]["HC por 100 g"]).replace(",", "."))
+                masa = densidad * vol
+                hc = masa * hc_100g / 100
+                raciones = hc / ratio_usuario
+                info[nombre] = {
+                    "volumen": vol,
+                    "masa": masa,
+                    "hc": hc,
+                    "raciones": raciones
             }
 
     import cv2
