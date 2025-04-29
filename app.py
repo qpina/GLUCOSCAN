@@ -183,7 +183,7 @@ with tab2:
     - Verás el volumen, peso, hidratos de carbono y raciones necesarias para cada alimento detectado.
     - Puedes descargar la imagen anotada con las detecciones.
                 
-                )"""
+    )"""
 
     st.image("foto_resultados.jpg", caption="Ejemplo de resultados", use_container_width=True)
 
