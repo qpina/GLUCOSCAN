@@ -153,17 +153,24 @@ with tab1:
 # Tab 2: ¿Cómo usar la app?
 # -------------------------
 with tab2:
-    st.header("🧾 ¿Cómo usar la aplicación?")
+    st.header("¿Cómo usar la aplicación?")
     st.markdown("""
     Sigue estos pasos para usar GlucoScan de manera correcta:
 
     ### 1️⃣ Prepara la imagen
     - Situa los alimentos que quieres analizar en una superficie plana.
     - Coloca nuestro dado de referenica apoyado sobre la cara del logo.
+                """)
+                
+    st.image("foto_preparacion.jpg", caption="Ejemplo de imagen correcta", use_container_width=True)
+
+    st.markdown("""
 
     ### 2️⃣ Sube tu imagen
     - Dirígete a la pestaña 📸 **Contador**.
-    - Usa el botón para subir una foto en formato `.jpg` o `.png`.
+    - Usa el botón para subir una foto en formato `.jpg` o `.png`. 
+    - Puedes subirla desde tu galería o hacer la foto desde la propia app.            
+                
 
     ### 3️⃣ Ajusta tu ratio de insulina
     - Introduce tu ratio personal de insulina (por ejemplo: 10 g de HC por unidad de insulina).
@@ -175,7 +182,12 @@ with tab2:
     ### 5️⃣ Consulta los resultados
     - Verás el volumen, peso, hidratos de carbono y raciones necesarias para cada alimento detectado.
     - Puedes descargar la imagen anotada con las detecciones.
+                
+                )"""
 
+    st.image("foto_resultados.jpg", caption="Ejemplo de resultados", use_container_width=True)
+
+    st.markdown("""
     🎯 ¡Así de fácil puedes controlar tu alimentación de forma automática!
     """)
 
