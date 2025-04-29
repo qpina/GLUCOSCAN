@@ -157,17 +157,19 @@ with tab2:
     col1, col2 = st.columns(2)
 
     with col1:
-        st.image("foto_grupo.jpg", width=400)  # Subir una imagen de tu grupo
+        st.image("foto_grupo.jpg", use_column_width=True)  # Subir una imagen de tu grupo
     with col2:
         st.markdown("""
-        **GlucoScan** es un proyecto desarrollado por estudiantes de la Universidad Politécnica de Madrid.
+        **GlucoScan** es una aplicación médica desarrollada por un grupo de alumnos de Máster de l universidad Politécnica de Madrid para la asignatura 
+        Ingenia Diseño en Bioingenierí - Medtech.
+                    
+        El objetivo de la aplicación es poder facilitar el control preciso y autónomo de la alimentación en personas 
+                    con diabetes Tipo I, mediante el cálculo automatizado de la dosis de insulina a partir del reconocimiento de alimentos. 
 
-        Nuestro objetivo es facilitar el conteo de hidratos de carbono a personas con diabetes mediante visión artificial.
 
-        - 👩‍🎓 Estudiantes: Aitana, Blanca, Juan, Jon, María, Marina, Quique y Sofía
-        - 📍 Universidad: UPM
+        - 👩‍🎓 Estudiantes: Aitana Carrillo, Blanca Santón, Juan García, Jon Beristain, María Fernández-Cordeiro, Marina Durán, Enrique Pina y Sofía Vigara
         - 📅 Año: 2024-2025
 
-        Gracias por confiar en nuestra app. ¡Seguiremos mejorándola cada día! 🚀
+        Gracias por probar nuestra app. ¡Esperemos que os sea util!
         """)
 
