@@ -70,7 +70,10 @@ def procesar_imagen(imagen_path, ratio_usuario=10):
                 volumen = None
 
             if volumen is not None:
-                volumenes[label] = volumen
+                if label in volumenes:
+                    volumenes[label] += volumen
+                else:
+                    volumenes[label] = volumen
 
     info = {}
     for fruta, vol in volumenes.items():
