@@ -1,6 +1,6 @@
 streamlit
 ultralytics==8.0.180
 opencv-python-headless==4.5.5.64
-numpy
+numpy==1.23.5
 pandas
 Pillow
