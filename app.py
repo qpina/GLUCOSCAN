@@ -31,7 +31,7 @@ with col2:
 # Función de procesar imagen
 # -------------------------
 def procesar_imagen(imagen_path, ratio_usuario=10):
-    from ultralytics import YOLO
+    from ultralytics.models.yolo.model import YOLO
     model = YOLO("best.pt")
 
     results = model.predict(source=imagen_path, conf=0.4)
