@@ -41,9 +41,9 @@ def procesar_imagen(imagen_path, ratio_usuario=10):
     names = results[0].names
 
     dice_indices = [i for i, cls in enumerate(classes) if names[cls] == "Dice"]
-    if not dice_indices:
-        raise ValueError("Dado no detectado. Por favor, repite la foto asegurándote de que el dado esté visible.")
-    dice_index = dice_indices[0]
+if not dice_indices:
+    raise ValueError("Dado no detectado. Por favor, repite la foto asegurándote de que el dado esté visible.")
+dice_index = dice_indices[0]
     dice_mask = masks[dice_index]
     dice_area_px = dice_mask.sum()
     cm2_per_pixel = (1.6**2) / dice_area_px
@@ -149,8 +149,7 @@ with tab1:
                     )
 
             except Exception as e:
-                st.error(f"❌ Error procesando la imagen: {e}")
-                raise
+                st.error(f"❌ {e}")
 
 # -------------------------
 # Tab 2: ¿Cómo usar la app?
